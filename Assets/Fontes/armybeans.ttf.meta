@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: b0fc0dfac4389014fa902d48db2938bc
+timeCreated: 1510326077
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Army Beans
+  fontNames:
+  - Army Beans
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
