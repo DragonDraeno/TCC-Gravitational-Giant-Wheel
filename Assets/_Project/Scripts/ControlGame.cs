@@ -10,6 +10,7 @@ public class ControlGame : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI timerTxt;
     [SerializeField] private GameObject btnGameReload;
     [SerializeField] private GameObject btnBackToMenu;
+	[SerializeField] private GameObject panelRefeshAndHome;
 
     private float timer;
     private bool pause;
@@ -22,8 +23,7 @@ public class ControlGame : MonoBehaviour {
         timerTxt.text = timer.ToString();
         timer = 120;
         pause = false;
-        btnGameReload.SetActive(false);
-        btnBackToMenu.SetActive(false);
+        panelRefeshAndHome.SetActive(false);
     }
 
 	void Update () {
@@ -48,15 +48,13 @@ public class ControlGame : MonoBehaviour {
         if (pause == false)
         {
             pause = true;
-            btnGameReload.SetActive(true);
-            btnBackToMenu.SetActive(true);
+            panelRefeshAndHome.SetActive(true);
             Time.timeScale = 0;
         }
         else
         {
             pause = false;
-            btnGameReload.SetActive(false);
-            btnBackToMenu.SetActive(false);
+            panelRefeshAndHome.SetActive(false);
             Time.timeScale = 1;
         }
     }
