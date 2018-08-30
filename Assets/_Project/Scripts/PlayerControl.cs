@@ -28,6 +28,11 @@ public class PlayerControl : MonoBehaviour
 
     float tempoOuloGigante;
 
+    bool upOrDown;
+    float speedUpOrDown;
+
+    float coinBonus;
+
     [SerializeField] private ControlGame controlGame;
 
     void Start()
@@ -35,12 +40,16 @@ public class PlayerControl : MonoBehaviour
         limitaVelMax = 30;
         limitaVelMin = -30;
 
-        limitaVelMaxUp = 30;
-        limitaVelMinDown = -30;
+        limitaVelMaxUp = 10;
+        limitaVelMinDown = -10;
 
         speedBase = 30;
+        speedUpOrDown = 10;
         speedInWallColide = 800;
-        
+
+        coinBonus = 5;
+
+        upOrDown = true;
     }
 
     // Update is called once per frame
@@ -70,41 +79,22 @@ public class PlayerControl : MonoBehaviour
             tempoOuloGigante = 0;
             personagemAnimacao.SetInteger("pulo", 1);
 
-            limitaVelMaxUp = limitaVelMaxUp + 50;
-            limitaVelMinDown = limitaVelMinDown - 50;
-            float y = Vector3.Dot(transform.forward, Vector3.Normalize(GetComponent<Rigidbody>().velocity));
-            GetComponent<Rigidbody>().AddForce(transform.forward * y * 3000 * Time.deltaTime, ForceMode.Impulse);
+            limitaVelMaxUp += 30;
+            limitaVelMinDown -= 30;
         }
 
         if (collision.gameObject.tag == "ArchUp")
         {
-            limitaVelMaxUp += limitaVelMaxUp;
+            limitaVelMaxUp += 10;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
-            float y = Vector3.Dot(transform.forward, Vector3.Normalize(GetComponent<Rigidbody>().velocity));
-            if (y > 0) {
-                GetComponent<Rigidbody>().AddForce(new Vector3(0, Mathf.Sign(-GetComponent<Rigidbody>().velocity.y) * (limitaVelMaxUp * 50) * Time.deltaTime, Mathf.Sign(-GetComponent<Rigidbody>().velocity.z) * (limitaVelMaxUp * 50) * Time.deltaTime), ForceMode.Impulse);
-            }
-            else {
-                GetComponent<Rigidbody>().AddForce(new Vector3(0, Mathf.Sign(GetComponent<Rigidbody>().velocity.y) * (limitaVelMaxUp * 50) * Time.deltaTime, Mathf.Sign(GetComponent<Rigidbody>().velocity.z) * (limitaVelMaxUp * 50) * Time.deltaTime), ForceMode.Impulse);
-            }
         }
 
         if (collision.gameObject.tag == "ArchDown")
         {
-            limitaVelMinDown += limitaVelMinDown;
+            limitaVelMinDown -= 10;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
-            float y = Vector3.Dot(transform.forward, Vector3.Normalize(GetComponent<Rigidbody>().velocity));
-            if (y < 0)
-            {
-                GetComponent<Rigidbody>().AddForce(new Vector3(0, Mathf.Sign(GetComponent<Rigidbody>().velocity.y) * (limitaVelMinDown * 50) * Time.deltaTime, Mathf.Sign(GetComponent<Rigidbody>().velocity.z) * (limitaVelMinDown * 50) * Time.deltaTime), ForceMode.Impulse);
-            }
-            else
-            {
-                GetComponent<Rigidbody>().AddForce(new Vector3(0, Mathf.Sign(-GetComponent<Rigidbody>().velocity.y) * (limitaVelMinDown * 50) * Time.deltaTime, Mathf.Sign(-GetComponent<Rigidbody>().velocity.z) * (limitaVelMinDown * 50) * Time.deltaTime), ForceMode.Impulse);
-            }
-            //GetComponent<Rigidbody>().AddForce(-(Vector3.Normalize(transform.forward) * (200 * limitaVelMinDown) * Time.deltaTime), ForceMode.Impulse);
         }
     }
 
@@ -112,7 +102,14 @@ public class PlayerControl : MonoBehaviour
     {
         if (collision.gameObject.tag == "Moeda")
         {
-            controlGame.Timer += 5;
+            if(coinBonus <= 0.01f)
+            {
+                coinBonus = 0.01f;
+            }
+
+            controlGame.Timer += coinBonus;
+
+            coinBonus -= Time.deltaTime;
             Instantiate(pegaPonto, transform.position, Quaternion.identity);
         }
 
@@ -136,7 +133,6 @@ public class PlayerControl : MonoBehaviour
         {
             GetComponent<Rigidbody>().AddForce(new Vector3(speedInWallColide, 0, 0));
         }
-
     }
 
     private void MovimentarLados()
@@ -156,17 +152,6 @@ public class PlayerControl : MonoBehaviour
              resetSideVelocity = false;
              GetComponent<Rigidbody>().AddForce(new Vector3(8000 * x * Time.deltaTime, 0, 0));
          }
-
-        /*if (Input.GetTouch(0).deltaPosition.x > 0)
-        {
-            resetSideVelocity = true;
-            GetComponent<Rigidbody>().AddForce(new Vector3(500, 0, 0));
-        } else
-        if (Input.GetTouch(0).deltaPosition.x < 0)
-        {
-            resetSideVelocity = false;
-            GetComponent<Rigidbody>().AddForce(new Vector3(-500, 0, 0));
-        }*/
 
         //limitar movimento laterais---------------------------------------------------------------------------
         if (resetSideVelocity == true && speedSide < 0)
@@ -192,36 +177,34 @@ public class PlayerControl : MonoBehaviour
     private void MovimentarVertical()
     {
         float y = TCKInput.GetAxis("Joystick", EAxisType.Vertical);
+     
+        if (y > 0.001)
+        {
+            upOrDown = true;
+        }
+        else if(y < -0.001){
+            upOrDown = false;
+        }
 
-        GetComponent<Rigidbody>().AddForce(-transform.forward * y * speedBase * Time.deltaTime, ForceMode.Impulse);
-
-        if (GetComponent<Rigidbody>().velocity.y >= limitaVelMaxUp) {
-            GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, limitaVelMaxUp, GetComponent<Rigidbody>().velocity.z);
-        }
-        if (GetComponent<Rigidbody>().velocity.z >= limitaVelMaxUp)
+        if (upOrDown == true)
         {
-            GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, GetComponent<Rigidbody>().velocity.y, limitaVelMaxUp);
+            transform.RotateAround(Vector3.zero, new Vector3(1, 0, 0), limitaVelMaxUp * Time.deltaTime);
         }
-        if (GetComponent<Rigidbody>().velocity.y <= limitaVelMinDown)
-        {
-            GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, limitaVelMinDown, GetComponent<Rigidbody>().velocity.z);
-        }
-        if (GetComponent<Rigidbody>().velocity.z <= limitaVelMinDown)
-        {
-            GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, GetComponent<Rigidbody>().velocity.y, limitaVelMinDown);
+        else {
+            transform.RotateAround(Vector3.zero, new Vector3(1, 0, 0), limitaVelMinDown * Time.deltaTime);
         }
     }
 
     private void DecrementVelocity()
     {
-        float DecrementSpeed = 10;
-        float DecrementSpeedSide = 50;
-       
-        if (limitaVelMaxUp > speedBase) {
+        float DecrementSpeed = 3;
+        float DecrementSpeedSide = 10;
+
+        if (limitaVelMaxUp >= 10) {
             limitaVelMaxUp -= Time.deltaTime * DecrementSpeed;
         }
 
-        if (limitaVelMinDown < -speedBase) {
+        if (limitaVelMinDown <= -10) {
             limitaVelMinDown += Time.deltaTime * DecrementSpeed;
         }
 
@@ -231,22 +214,25 @@ public class PlayerControl : MonoBehaviour
             limitaVelMin += Time.deltaTime * DecrementSpeedSide;
         }
     }
+
     private void LimitVelocity()
     {
+        float velocityLimiteMax = 100;
 
-        Vector3 velocityCurrent = GetComponent<Rigidbody>().velocity;
-        float velocityLimiteMax = 150;
-
-        if (velocityCurrent.x > velocityLimiteMax) {
-            GetComponent<Rigidbody>().velocity = new Vector3(velocityLimiteMax, velocityCurrent.y, velocityCurrent.z);
+        if (limitaVelMaxUp >= velocityLimiteMax / 2) {
+            limitaVelMaxUp = velocityLimiteMax / 2;
         }
-        if (velocityCurrent.y > velocityLimiteMax)
+        if (limitaVelMaxUp <= -velocityLimiteMax / 2)
         {
-            GetComponent<Rigidbody>().velocity = new Vector3(velocityCurrent.x, velocityLimiteMax, velocityCurrent.z);
+            limitaVelMaxUp = -velocityLimiteMax / 2;
         }
-        if (velocityCurrent.z > velocityLimiteMax)
+        if (limitaVelMax >= velocityLimiteMax)
         {
-            GetComponent<Rigidbody>().velocity = new Vector3(velocityCurrent.x, velocityCurrent.y, velocityLimiteMax);
+            limitaVelMax = velocityLimiteMax;
+        }
+        if (limitaVelMin <= -velocityLimiteMax)
+        {
+            limitaVelMin = -velocityLimiteMax;
         }
     }
 }
