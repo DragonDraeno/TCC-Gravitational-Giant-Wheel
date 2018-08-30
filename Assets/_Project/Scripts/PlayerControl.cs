@@ -34,6 +34,7 @@ public class PlayerControl : MonoBehaviour
     float coinBonus;
 
     [SerializeField] private ControlGame controlGame;
+    [SerializeField] private Camera mainCamera;
 
     void Start()
     {
@@ -63,7 +64,7 @@ public class PlayerControl : MonoBehaviour
         if (personagemAnimacao.GetInteger("pulo") == 1)
         {
             tempoOuloGigante += 1 * Time.deltaTime;
-            if (tempoOuloGigante >= 3)
+            if (tempoOuloGigante >= 4)
             {
                 tempoOuloGigante = 0;
                 GetComponent<Collider>().enabled = true;
@@ -79,20 +80,20 @@ public class PlayerControl : MonoBehaviour
             tempoOuloGigante = 0;
             personagemAnimacao.SetInteger("pulo", 1);
 
-            limitaVelMaxUp += 30;
-            limitaVelMinDown -= 30;
+            limitaVelMaxUp += 10;
+            limitaVelMinDown -= 10;
         }
 
         if (collision.gameObject.tag == "ArchUp")
         {
-            limitaVelMaxUp += 10;
+            limitaVelMaxUp += 5;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
         }
 
         if (collision.gameObject.tag == "ArchDown")
         {
-            limitaVelMinDown -= 10;
+            limitaVelMinDown -= 5;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
         }
@@ -197,7 +198,7 @@ public class PlayerControl : MonoBehaviour
 
     private void DecrementVelocity()
     {
-        float DecrementSpeed = 3;
+        float DecrementSpeed = 2;
         float DecrementSpeedSide = 10;
 
         if (limitaVelMaxUp >= 10) {
