@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TouchControlsKit;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
@@ -12,9 +13,18 @@ public class ControlGame : MonoBehaviour {
     [SerializeField] private GameObject btnBackToMenu;
 	[SerializeField] private GameObject panelRefeshAndHome;
 
+	[SerializeField] private GameObject panelButtons;
+	[SerializeField] private GameObject panelTouch;
+
+    [SerializeField] GameObject popUpChoseControll;
+    [SerializeField] private Toggle ButtonTgl;
+    [SerializeField] private Toggle TouchTgl;
+
     private float timer;
     private bool pause;
-    
+
+    private bool begginer;
+
     public float Timer {get{ return timer; }set{ timer = value; }}
 
     private void Awake()
@@ -24,9 +34,23 @@ public class ControlGame : MonoBehaviour {
         timer = 120;
         pause = false;
         panelRefeshAndHome.SetActive(false);
+        
+        ButtonTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
+        TouchTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
+
+        begginer = true;
+        if (begginer == true)
+        {
+            Time.timeScale = 0;
+            popUpChoseControll.SetActive(true);
+            begginer = false;
+        }
+        else {
+            popUpChoseControll.SetActive(false);
+        }
     }
 
-	void Update () {
+    void Update () {
         timer -= Time.deltaTime;
         timerTxt.text = "Time: " + Mathf.Floor(timer / 60).ToString("00") + ":" + (timer % 60).ToString("00");
 
@@ -49,16 +73,41 @@ public class ControlGame : MonoBehaviour {
         {
             pause = true;
             panelRefeshAndHome.SetActive(true);
+            popUpChoseControll.SetActive(true);
             Time.timeScale = 0;
         }
         else
         {
             pause = false;
             panelRefeshAndHome.SetActive(false);
+            popUpChoseControll.SetActive(false);
             Time.timeScale = 1;
         }
     }
 
+    public void IsBegginer()
+    {
+        if (ButtonTgl.isOn == true) {
+            panelButtons.SetActive(true);
+            panelTouch.SetActive(false);
+        }
+
+        if (TouchTgl.isOn == true) {
+            panelTouch.SetActive(true);
+            panelButtons.SetActive(false);
+        }
+
+        if (panelRefeshAndHome.activeSelf == true)
+        {
+            Time.timeScale = 0;
+        }
+        else {
+            Time.timeScale = 1;
+        }
+
+        popUpChoseControll.SetActive(false);
+    }
+    
     public void GameReloadLevelBtn()
     {
         SceneManager.LoadScene("fase00", LoadSceneMode.Single);

@@ -140,19 +140,19 @@ public class PlayerControl : MonoBehaviour
     {
         speedSide = GetComponent<Rigidbody>().velocity.x;
 
-        float x = TCKInput.GetAxis("Joystick", EAxisType.Horizontal);
+        //float x = TCKInput.GetAxis("Joystick", EAxisType.Horizontal);
 
-        if (x > 0)//dir
+        if (TCKInput.GetAction("hightBtn", EActionEvent.Press))//dir
         {
             resetSideVelocity = true;
-            GetComponent<Rigidbody>().AddForce(new Vector3(8000 * x * Time.deltaTime, 0, 0));
+            GetComponent<Rigidbody>().AddForce(new Vector3(5000 * Time.deltaTime, 0, 0));
         }
 
-         if (x < 0)//esq
-         {
-             resetSideVelocity = false;
-             GetComponent<Rigidbody>().AddForce(new Vector3(8000 * x * Time.deltaTime, 0, 0));
-         }
+        if (TCKInput.GetAction("leftBtn", EActionEvent.Press))//esq
+        {
+            resetSideVelocity = false;
+            GetComponent<Rigidbody>().AddForce(new Vector3(-5000 * Time.deltaTime, 0, 0));
+        }
 
         //limitar movimento laterais---------------------------------------------------------------------------
         if (resetSideVelocity == true && speedSide < 0)
@@ -177,13 +177,13 @@ public class PlayerControl : MonoBehaviour
 
     private void MovimentarVertical()
     {
-        float y = TCKInput.GetAxis("Joystick", EAxisType.Vertical);
-     
-        if (y > 0.001)
+        //float y = TCKInput.GetAxis("Joystick", EAxisType.Vertical);
+        if (TCKInput.GetAction("UpBtn", EActionEvent.Press) || TCKInput.GetAction("UpBtn2", EActionEvent.Press))
         {
             upOrDown = true;
         }
-        else if(y < -0.001){
+        if (TCKInput.GetAction("DownBtn", EActionEvent.Press) || TCKInput.GetAction("DownBtn2", EActionEvent.Press))
+        {
             upOrDown = false;
         }
 
