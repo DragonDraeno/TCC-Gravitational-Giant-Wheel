@@ -8,6 +8,9 @@ using TouchControlsKit;
 public class PlayerControl : MonoBehaviour
 {
 
+    [SerializeField] private ControlGame controlGame;
+    [SerializeField] private Camera mainCamera;
+
     public Animator personagemAnimacao;
     public Animator cameraAnimacao;
     
@@ -32,9 +35,6 @@ public class PlayerControl : MonoBehaviour
     float speedUpOrDown;
 
     float coinBonus;
-
-    [SerializeField] private ControlGame controlGame;
-    [SerializeField] private Camera mainCamera;
 
     void Start()
     {
@@ -77,6 +77,13 @@ public class PlayerControl : MonoBehaviour
     {
         if (collision.gameObject.tag == "plataformaImpulsiona")
         {
+           /* Vector3 currentAngle = new Vector3( Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime),
+                                        Mathf.LerpAngle(currentAngle.y, targetAngle.y, Time.deltaTime),
+                                        Mathf.LerpAngle(currentAngle.z, targetAngle.z, Time.deltaTime)
+                                        );
+
+            transform.eulerAngles = currentAngle;*/
+   
             tempoOuloGigante = 0;
             personagemAnimacao.SetInteger("pulo", 1);
 
@@ -87,6 +94,7 @@ public class PlayerControl : MonoBehaviour
         if (collision.gameObject.tag == "ArchUp")
         {
             limitaVelMaxUp += 5;
+            limitaVelMinDown = -10;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
         }
@@ -94,6 +102,7 @@ public class PlayerControl : MonoBehaviour
         if (collision.gameObject.tag == "ArchDown")
         {
             limitaVelMinDown -= 5;
+            limitaVelMaxUp = 10;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
         }
@@ -139,19 +148,36 @@ public class PlayerControl : MonoBehaviour
     private void MovimentarLados()
     {
         speedSide = GetComponent<Rigidbody>().velocity.x;
-
-        //float x = TCKInput.GetAxis("Joystick", EAxisType.Horizontal);
-
-        if (TCKInput.GetAction("hightBtn", EActionEvent.Press))//dir
+        
+        if (PlayerPrefs.GetInt("ButtonOrToutch") == 0)
         {
-            resetSideVelocity = true;
-            GetComponent<Rigidbody>().AddForce(new Vector3(5000 * Time.deltaTime, 0, 0));
+            if (TCKInput.GetAction("hightBtn", EActionEvent.Press))//dir
+            {
+                resetSideVelocity = true;
+                GetComponent<Rigidbody>().AddForce(new Vector3(5000 * Time.deltaTime, 0, 0));
+            }
+
+            if (TCKInput.GetAction("leftBtn", EActionEvent.Press))//esq
+            {
+                resetSideVelocity = false;
+                GetComponent<Rigidbody>().AddForce(new Vector3(-5000 * Time.deltaTime, 0, 0));
+            }
         }
+        else {
+            float x = TCKInput.GetAxis("Joystick", EAxisType.Horizontal);
 
-        if (TCKInput.GetAction("leftBtn", EActionEvent.Press))//esq
-        {
-            resetSideVelocity = false;
-            GetComponent<Rigidbody>().AddForce(new Vector3(-5000 * Time.deltaTime, 0, 0));
+
+            if (x > 0)//dir
+            {
+                resetSideVelocity = true;
+                GetComponent<Rigidbody>().AddForce(new Vector3(8000 * x * Time.deltaTime, 0, 0));
+            }
+
+            if (x < 0)//esq
+            {
+                resetSideVelocity = false;
+                GetComponent<Rigidbody>().AddForce(new Vector3(8000 * x * Time.deltaTime, 0, 0));
+            }
         }
 
         //limitar movimento laterais---------------------------------------------------------------------------
@@ -177,21 +203,37 @@ public class PlayerControl : MonoBehaviour
 
     private void MovimentarVertical()
     {
-        //float y = TCKInput.GetAxis("Joystick", EAxisType.Vertical);
-        if (TCKInput.GetAction("UpBtn", EActionEvent.Press) || TCKInput.GetAction("UpBtn2", EActionEvent.Press))
+        if (PlayerPrefs.GetInt("ButtonOrToutch") == 0)
         {
-            upOrDown = true;
+            if (TCKInput.GetAction("UpBtn", EActionEvent.Press) || TCKInput.GetAction("UpBtn2", EActionEvent.Press))
+            {
+                upOrDown = true;
+            }
+            if (TCKInput.GetAction("DownBtn", EActionEvent.Press) || TCKInput.GetAction("DownBtn2", EActionEvent.Press))
+            {
+                upOrDown = false;
+            }
         }
-        if (TCKInput.GetAction("DownBtn", EActionEvent.Press) || TCKInput.GetAction("DownBtn2", EActionEvent.Press))
+        else
         {
-            upOrDown = false;
+            float y = TCKInput.GetAxis("Joystick", EAxisType.Vertical);
+
+            if (y > 0.001)
+            {
+                upOrDown = true;
+            }
+            else if (y < -0.001)
+            {
+                upOrDown = false;
+            }
         }
 
         if (upOrDown == true)
         {
             transform.RotateAround(Vector3.zero, new Vector3(1, 0, 0), limitaVelMaxUp * Time.deltaTime);
         }
-        else {
+        else
+        {
             transform.RotateAround(Vector3.zero, new Vector3(1, 0, 0), limitaVelMinDown * Time.deltaTime);
         }
     }

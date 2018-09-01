@@ -13,8 +13,6 @@ namespace Examples
         float weapReadyTime;
         bool weapReady = true;
 
-
-        // Awake
         void Awake()
         {
             myTransform = transform;
@@ -22,7 +20,6 @@ namespace Examples
             controller = GetComponent<CharacterController>();
         }
 
-        // Update
         void Update()
         {
             if( weapReady == false )
@@ -34,8 +31,7 @@ namespace Examples
                     weapReadyTime = 0f;
                 }
             }
-
-
+            
             if( TCKInput.GetAction( "jumpBtn", EActionEvent.Down ) )
             {
                 Jumping();

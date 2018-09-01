@@ -38,14 +38,30 @@ public class ControlGame : MonoBehaviour {
         ButtonTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
         TouchTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
 
-        begginer = true;
+        if (PlayerPrefs.GetInt("isBegginer") != 1)
+        {
+            begginer = true;
+        }
+        else {
+            begginer = false;
+        }
+
         if (begginer == true)
         {
             Time.timeScale = 0;
             popUpChoseControll.SetActive(true);
-            begginer = false;
+            PlayerPrefs.SetInt("isBegginer", 1);
         }
         else {
+            if (PlayerPrefs.GetInt("ButtonOrToutch") == 0) {
+                panelButtons.SetActive(true);
+                panelTouch.SetActive(false);
+            }
+            else {
+                panelButtons.SetActive(false);
+                panelTouch.SetActive(true);
+            }
+
             popUpChoseControll.SetActive(false);
         }
     }
@@ -90,11 +106,13 @@ public class ControlGame : MonoBehaviour {
         if (ButtonTgl.isOn == true) {
             panelButtons.SetActive(true);
             panelTouch.SetActive(false);
+            PlayerPrefs.SetInt("ButtonOrToutch", 0);
         }
 
         if (TouchTgl.isOn == true) {
             panelTouch.SetActive(true);
             panelButtons.SetActive(false);
+            PlayerPrefs.SetInt("ButtonOrToutch", 1);
         }
 
         if (panelRefeshAndHome.activeSelf == true)
