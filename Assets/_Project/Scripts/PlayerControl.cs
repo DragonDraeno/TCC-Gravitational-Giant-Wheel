@@ -36,6 +36,10 @@ public class PlayerControl : MonoBehaviour
 
     float coinBonus;
 
+    bool backStabUp;
+    bool backStabDown;
+    float timerBackStab;
+
     void Start()
     {
         limitaVelMax = 30;
@@ -51,6 +55,9 @@ public class PlayerControl : MonoBehaviour
         coinBonus = 5;
 
         upOrDown = true;
+        backStabUp = false;
+        backStabDown = false;
+        timerBackStab = 1;
     }
 
     // Update is called once per frame
@@ -60,6 +67,7 @@ public class PlayerControl : MonoBehaviour
         MovimentarVertical();
         DecrementVelocity();
         LimitVelocity();
+        BackStab();
 
         if (personagemAnimacao.GetInteger("pulo") == 1)
         {
@@ -97,6 +105,17 @@ public class PlayerControl : MonoBehaviour
             limitaVelMinDown = -10;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
+
+            if (upOrDown == true)
+            {
+                print("esta andando corretamente para cima");
+            }
+            else {
+                print("esta andando para o lado contrario");
+                backStabUp = true;
+                upOrDown = true;
+                limitaVelMinDown = -limitaVelMaxUp;
+            }
         }
         
         if (collision.gameObject.tag == "ArchDown")
@@ -106,6 +125,18 @@ public class PlayerControl : MonoBehaviour
 
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
+
+            if (upOrDown == false)
+            {
+                print("esta andando corretamente para baixo");
+            }
+            else
+            {
+                print("esta andando para o lado contrario");
+                backStabDown = true;
+                upOrDown = false;
+                limitaVelMaxUp = Mathf.Abs(limitaVelMinDown);
+            }
         }
     }
 
@@ -229,11 +260,11 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        if (upOrDown == true)
+        if ((upOrDown == true || backStabUp == true) && backStabDown == false)
         {
             transform.RotateAround(Vector3.zero, new Vector3(1, 0, 0), limitaVelMaxUp * Time.deltaTime);
         }
-        else
+        else if((upOrDown == false || backStabDown == true) && backStabUp == false)
         {
             transform.RotateAround(Vector3.zero, new Vector3(1, 0, 0), limitaVelMinDown * Time.deltaTime);
         }
@@ -277,6 +308,28 @@ public class PlayerControl : MonoBehaviour
         if (limitaVelMin <= -velocityLimiteMax)
         {
             limitaVelMin = -velocityLimiteMax;
+        }
+    }
+
+    private void BackStab()
+    {
+        if (backStabUp == true) {
+            timerBackStab -= Time.deltaTime;
+            if (timerBackStab <= 0 && upOrDown == false)
+            {
+                backStabUp = false;
+                timerBackStab = 1;
+            }
+        }
+
+        if (backStabDown == true)
+        {
+            timerBackStab -= Time.deltaTime;
+            if (timerBackStab <= 0 && upOrDown == true)
+            {
+                backStabDown = false;
+                timerBackStab = 1;
+            }
         }
     }
 }
