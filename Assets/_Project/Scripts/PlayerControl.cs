@@ -98,11 +98,12 @@ public class PlayerControl : MonoBehaviour
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
         }
-
+        
         if (collision.gameObject.tag == "ArchDown")
         {
             limitaVelMinDown -= 5;
             limitaVelMaxUp = 10;
+
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
         }
