@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 8694a3f416746f14fbb344f661554f9e
+timeCreated: 1536097534
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: LIBRARY 3 AM soft
+  fontNames:
+  - LIBRARY 3 AM soft
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

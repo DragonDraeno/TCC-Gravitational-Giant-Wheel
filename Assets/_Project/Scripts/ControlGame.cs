@@ -9,6 +9,7 @@ using TMPro;
 public class ControlGame : MonoBehaviour {
 
     [SerializeField] private TextMeshProUGUI timerTxt;
+    [SerializeField] private TextMeshProUGUI timerTotalTxt;
     [SerializeField] private GameObject btnGameReload;
     [SerializeField] private GameObject btnBackToMenu;
 	[SerializeField] private GameObject panelRefeshAndHome;
@@ -21,6 +22,7 @@ public class ControlGame : MonoBehaviour {
     [SerializeField] private Toggle TouchTgl;
 
     private float timer;
+    private float timerTotal;
     private bool pause;
 
     private bool begginer;
@@ -31,6 +33,7 @@ public class ControlGame : MonoBehaviour {
     {
         Time.timeScale = 1;
         timerTxt.text = timer.ToString();
+        timerTotalTxt.text = "0";
         timer = 120;
         pause = false;
         panelRefeshAndHome.SetActive(false);
@@ -69,6 +72,8 @@ public class ControlGame : MonoBehaviour {
     void Update () {
         timer -= Time.deltaTime;
         timerTxt.text = "Time: " + Mathf.Floor(timer / 60).ToString("00") + ":" + (timer % 60).ToString("00");
+        timerTotal += Time.deltaTime;
+        timerTotalTxt.text = "Time Total: " + Mathf.Floor(timerTotal / 60).ToString("00") + ":" + (timerTotal % 60).ToString("00");
 
         if (TCKInput.GetAction("PauseBtn", EActionEvent.Down))
         {
