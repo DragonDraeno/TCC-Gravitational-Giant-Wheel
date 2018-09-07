@@ -7,9 +7,11 @@ using TouchControlsKit;
 
 public class PlayerControl : MonoBehaviour
 {
-
     [SerializeField] private ControlGame controlGame;
     [SerializeField] private Camera mainCamera;
+
+    [SerializeField] private GameObject UpBtn;
+    [SerializeField] private GameObject DownBtn;
 
     public Animator personagemAnimacao;
     public Animator cameraAnimacao;
@@ -42,6 +44,9 @@ public class PlayerControl : MonoBehaviour
 
     void Start()
     {
+        UpBtn.SetActive(false);
+        DownBtn.SetActive(false);
+
         limitaVelMax = 30;
         limitaVelMin = -30;
 
@@ -68,6 +73,7 @@ public class PlayerControl : MonoBehaviour
         DecrementVelocity();
         LimitVelocity();
         BackStab();
+        ChangeSpriteUpOrDown();
 
         if (personagemAnimacao.GetInteger("pulo") == 1)
         {
@@ -237,11 +243,11 @@ public class PlayerControl : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("ButtonOrToutch") == 0)
         {
-            if (TCKInput.GetAction("UpBtn", EActionEvent.Press) || TCKInput.GetAction("UpBtn2", EActionEvent.Press))
+            if (TCKInput.GetAction("ChangeUp", EActionEvent.Up))
             {
                 upOrDown = true;
-            }
-            if (TCKInput.GetAction("DownBtn", EActionEvent.Press) || TCKInput.GetAction("DownBtn2", EActionEvent.Press))
+            }else
+            if (TCKInput.GetAction("ChangeDown", EActionEvent.Up))
             {
                 upOrDown = false;
             }
@@ -330,6 +336,19 @@ public class PlayerControl : MonoBehaviour
                 backStabDown = false;
                 timerBackStab = 1;
             }
+        }
+    }
+
+    private void ChangeSpriteUpOrDown()
+    {
+        if (upOrDown == false)
+        {
+            DownBtn.SetActive(false);
+            UpBtn.SetActive(true);
+        }
+        else {
+            UpBtn.SetActive(false);
+            DownBtn.SetActive(true);
         }
     }
 }
