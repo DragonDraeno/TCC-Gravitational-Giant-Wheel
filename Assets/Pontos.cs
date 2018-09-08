@@ -3,45 +3,69 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pontos : MonoBehaviour {
+    
+    [SerializeField] ControlGame controlGame;
+    private BoxCollider starColider;
 
-    //public GameObject personagem;
+    public bool personagemColision;
+    public float timerToReturn;
+    public float timerRuning;
 
-    int ativa;
-    float timerAtivar;
-    Vector3 posPrimaria;
-    //public bool ativa;
-    // Use this for initialization
+    public bool PersonagemColision { get { return personagemColision; } set { personagemColision = value; } }
+    public float TimerToReturn { get { return timerToReturn; } set { timerToReturn = value; } }
+
+
     void Start () {
-
-        ativa = 0;
-        timerAtivar = 0;
-
-        posPrimaria = transform.position;
+        personagemColision = false;
+        timerRuning = 0;
+        starColider = gameObject.GetComponent<BoxCollider>();
     }
-	
-	// Update is called once per frame
+
 	void Update () {
 
-        if (ativa == 1) {//estrela desativada
+        if (personagemColision == true) {
+            timerRuning += Time.deltaTime;
 
-            timerAtivar += 1 * Time.deltaTime;
-            if (timerAtivar > 60) {//cd para ativar
-                transform.position = posPrimaria;
+            if (timerRuning >= timerToReturn)
+            {
+                print(timerRuning);
+                personagemColision = false;
+                timerRuning = 0;
+
+                Transform childAux = GetChildOfChild();
+                childAux.GetComponent<MeshRenderer>().enabled = true;
+                Component halo = childAux.GetComponent("Halo");
+                halo.GetType().GetProperty("enabled").SetValue(halo, true, null);
+                starColider.enabled = true;
+            }
+        }
+        
+    }
+
+    private void OnTriggerStay(Collider collision)
+    {
+        if (collision.gameObject.name == "personagem")
+        {
+            if (GetChildOfChild() != null) {
+                Transform childAux = GetChildOfChild();
+                Component halo = childAux.GetComponent("Halo");
+                halo.GetType().GetProperty("enabled").SetValue(halo, false, null);
+                childAux.GetComponent<MeshRenderer>().enabled = false;
+                starColider.enabled = false;
+            }
+        }
+    }
+
+    private Transform GetChildOfChild() {
+
+        foreach (Transform child in transform)
+        {    
+            foreach (Transform child2 in child.transform)
+            {
+                return child2;
             }
         }
 
+        return null;
     }
-    private void OnTriggerStay(Collider collision)
-    {
-       // print("collisioncollisioncollisioncollision: " + gameObject.name);
-        if (collision.gameObject.name == "personagem")
-        {
-            
-            transform.position = new Vector3(0, 0, 1000);
-            ativa = 1;
-            timerAtivar = 0;
-        }
-
-    }
-
 }

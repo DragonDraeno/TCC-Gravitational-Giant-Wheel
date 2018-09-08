@@ -27,8 +27,11 @@ public class ControlGame : MonoBehaviour {
 
     private bool begginer;
 
-    public float Timer {get{ return timer; }set{ timer = value; }}
+    private float timerPointsRespawn;
 
+    public float Timer {get{ return timer; }set{ timer = value; }}
+    public float TimerPointsRespawn { get{ return timerPointsRespawn; }set{ timerPointsRespawn = value; }}
+    
     private void Awake()
     {
         Time.timeScale = 1;
@@ -67,6 +70,8 @@ public class ControlGame : MonoBehaviour {
 
             popUpChoseControll.SetActive(false);
         }
+
+        timerPointsRespawn = 10;
     }
 
     void Update () {
@@ -87,6 +92,9 @@ public class ControlGame : MonoBehaviour {
         {
             BackToMenuBtn();
         }
+
+        timerPointsRespawn += Time.deltaTime;
+        //print(timerPointsRespawn);
     }
 
     public void GamePauseBtn() {

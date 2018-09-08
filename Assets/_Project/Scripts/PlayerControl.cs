@@ -13,8 +13,8 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private GameObject UpBtn;
     [SerializeField] private GameObject DownBtn;
 
-    public Animator personagemAnimacao;
-    public Animator cameraAnimacao;
+    [SerializeField] Animator personagemAnimacao;
+    [SerializeField] Animator cameraAnimacao;
     
     float speedSide;
     float speedBase;
@@ -41,6 +41,9 @@ public class PlayerControl : MonoBehaviour
     bool backStabUp;
     bool backStabDown;
     float timerBackStab;
+    
+    ShaderEffect_CorruptedVram glithCorruptedVram;
+    float glithPower;
 
     void Start()
     {
@@ -63,6 +66,10 @@ public class PlayerControl : MonoBehaviour
         backStabUp = false;
         backStabDown = false;
         timerBackStab = 1;
+        
+        glithPower = 10;
+
+        glithCorruptedVram = mainCamera.GetComponent<ShaderEffect_CorruptedVram>();
     }
 
     // Update is called once per frame
@@ -74,6 +81,7 @@ public class PlayerControl : MonoBehaviour
         LimitVelocity();
         BackStab();
         ChangeSpriteUpOrDown();
+        GlithAirShoot();
 
         if (personagemAnimacao.GetInteger("pulo") == 1)
         {
@@ -91,12 +99,13 @@ public class PlayerControl : MonoBehaviour
     {
         if (collision.gameObject.tag == "plataformaImpulsiona")
         {
-           /* Vector3 currentAngle = new Vector3( Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime),
-                                        Mathf.LerpAngle(currentAngle.y, targetAngle.y, Time.deltaTime),
-                                        Mathf.LerpAngle(currentAngle.z, targetAngle.z, Time.deltaTime)
+            /*float y = mainCamera.transform.rotation.z + 90;
+            Vector3 currentAngle = new Vector3( Mathf.LerpAngle(mainCamera.transform.localEulerAngles.x, -90, 0),
+                                        Mathf.LerpAngle(y, 90, 1),
+                                        Mathf.LerpAngle(mainCamera.transform.localEulerAngles.z, 0, 0)
                                         );
 
-            transform.eulerAngles = currentAngle;*/
+            mainCamera.transform.localEulerAngles = currentAngle;*/
    
             tempoOuloGigante = 0;
             personagemAnimacao.SetInteger("pulo", 1);
@@ -158,16 +167,19 @@ public class PlayerControl : MonoBehaviour
             controlGame.Timer += coinBonus;
 
             coinBonus -= Time.deltaTime;
-            Instantiate(pegaPonto, transform.position, Quaternion.identity);
+            collision.gameObject.GetComponent<Pontos>().PersonagemColision = true;
+            collision.gameObject.GetComponent<Pontos>().TimerToReturn = controlGame.TimerPointsRespawn;
         }
 
         if (collision.gameObject.tag == "arShoot")
         {
+            mainCamera.GetComponent<ShaderEffect_CorruptedVram>().shift = 10;
             GetComponent<Rigidbody>().AddForce(new Vector3(800, 0, 0));
         }
 
         if (collision.gameObject.tag == "arShootEsq")
         {
+            mainCamera.GetComponent<ShaderEffect_CorruptedVram>().shift = -10;
             GetComponent<Rigidbody>().AddForce(new Vector3(-800, 0, 0));
         }
 
@@ -349,6 +361,21 @@ public class PlayerControl : MonoBehaviour
         else {
             UpBtn.SetActive(false);
             DownBtn.SetActive(true);
+        }
+    }
+
+    private void GlithAirShoot()
+    {
+        if (glithCorruptedVram.shift < 0)
+        {
+            glithCorruptedVram.shift += Time.deltaTime * glithPower;
+        }
+        else if (glithCorruptedVram.shift > 0)
+        {
+            glithCorruptedVram.shift -= Time.deltaTime * glithPower;
+        }
+        else {
+            glithCorruptedVram.shift = 0;
         }
     }
 }

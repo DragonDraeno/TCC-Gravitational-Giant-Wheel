@@ -358,6 +358,15 @@
     <None Include="Assets\GE Common Assets\Readme.txt" />
     <None Include="Assets\GUI Animator\GUI Animator FREE\!How to.txt" />
     <None Include="Assets\GUI Animator\GUI Animator FREE\Readme.txt" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\BWDiffuse.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\BleedingColors.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\Distortion.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\Distortion2D__FullOnly.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\Scanlines.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\Shift.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\Tint.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Assets\Shaders\VUnsync.shader" />
+    <None Include="Assets\Realistic Glitches Lite\Documentation\Realistic Glitches.txt" />
     <None Include="Assets\SimpleFirebaseUnity\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\SimpleFirebaseUnity\Plugins\simple-firebase-csharp.xml" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
