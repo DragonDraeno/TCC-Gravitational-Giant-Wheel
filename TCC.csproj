@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
     <UnityVersion>2017.3.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -322,6 +324,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_MK\MKGlowFree\MKGlowFree.cs" />
+    <Compile Include="Assets\_Project\AnimationObjects3D\ChangeSide.cs" />
     <Compile Include="Assets\_Project\Scripts\CanvasMainMenu.cs" />
     <Compile Include="Assets\_Project\Scripts\ControlGame.cs" />
     <Compile Include="Assets\_Project\Scripts\Licenses.cs" />
@@ -382,7 +385,7 @@
     <Compile Include="Assets\nomePontos.cs" />
     <Compile Include="Assets\personagem.cs" />
     <Compile Include="Assets\personagemFisica.cs" />
-    <Compile Include="Assets\Pontos.cs" />
+    <Compile Include="Assets\Points.cs" />
     <Compile Include="Assets\Realistic Glitches Lite\Assets\Scripts\BWEffect.cs" />
     <Compile Include="Assets\Realistic Glitches Lite\Assets\Scripts\DiyEffect__FullOnly.cs" />
     <Compile Include="Assets\Realistic Glitches Lite\Assets\Scripts\ShaderEffect_BleedingColors.cs" />

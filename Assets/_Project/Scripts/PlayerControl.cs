@@ -110,13 +110,13 @@ public class PlayerControl : MonoBehaviour
             tempoOuloGigante = 0;
             personagemAnimacao.SetInteger("pulo", 1);
 
-            limitaVelMaxUp += 10;
+            limitaVelMaxUp += 15;
             limitaVelMinDown -= 10;
         }
 
         if (collision.gameObject.tag == "ArchUp")
         {
-            limitaVelMaxUp += 5;
+            limitaVelMaxUp += 10;
             limitaVelMinDown = -10;
             limitaVelMax += limitaVelMax;
             limitaVelMin += limitaVelMin;
@@ -135,7 +135,7 @@ public class PlayerControl : MonoBehaviour
         
         if (collision.gameObject.tag == "ArchDown")
         {
-            limitaVelMinDown -= 5;
+            limitaVelMinDown -= 10;
             limitaVelMaxUp = 10;
 
             limitaVelMax += limitaVelMax;
@@ -167,8 +167,9 @@ public class PlayerControl : MonoBehaviour
             controlGame.Timer += coinBonus;
 
             coinBonus -= Time.deltaTime;
-            collision.gameObject.GetComponent<Pontos>().PersonagemColision = true;
-            collision.gameObject.GetComponent<Pontos>().TimerToReturn = controlGame.TimerPointsRespawn;
+            collision.gameObject.GetComponent<Points>().PersonagemColision = true;
+            collision.gameObject.GetComponent<Points>().TimerToReturn = controlGame.TimerPointsRespawn;
+            Instantiate(pegaPonto, transform.position, Quaternion.identity);
         }
 
         if (collision.gameObject.tag == "arShoot")
@@ -290,7 +291,7 @@ public class PlayerControl : MonoBehaviour
 
     private void DecrementVelocity()
     {
-        float DecrementSpeed = 2;
+        float DecrementSpeed = 3;
         float DecrementSpeedSide = 10;
 
         if (limitaVelMaxUp >= 10) {
