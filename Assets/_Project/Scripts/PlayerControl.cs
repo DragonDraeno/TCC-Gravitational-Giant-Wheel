@@ -367,16 +367,16 @@ public class PlayerControl : MonoBehaviour
 
     private void GlithAirShoot()
     {
-        if (glithCorruptedVram.shift < 0)
+        if (glithCorruptedVram.shift < -1)
         {
             glithCorruptedVram.shift += Time.deltaTime * glithPower;
         }
-        else if (glithCorruptedVram.shift > 0)
+        else if (glithCorruptedVram.shift > 1)
         {
             glithCorruptedVram.shift -= Time.deltaTime * glithPower;
         }
         else {
-            glithCorruptedVram.shift = 0;
+            glithCorruptedVram.shift = (int)0;
         }
     }
 }
