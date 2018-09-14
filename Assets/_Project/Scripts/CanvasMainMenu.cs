@@ -13,6 +13,8 @@ public class CanvasMainMenu : MonoBehaviour {
     [SerializeField] private Slider musicVolSldr;
     [SerializeField] private Slider sondVolSldr;
 
+    [SerializeField] private Animator cameraAnimator;
+
     public GameObject MainMenuPanel;
     public GameObject configPanel;
 
@@ -22,6 +24,8 @@ public class CanvasMainMenu : MonoBehaviour {
     [SerializeField] private GameObject loadingFld;
     [SerializeField] private Slider loadingSldr;
     AsyncOperation asyncOpp;
+    
+    public ShaderEffect_CorruptedVram shaderShift;
 
     int firstGame;
 
@@ -44,10 +48,8 @@ public class CanvasMainMenu : MonoBehaviour {
     }
 
     public void btnPlay() {
-        MainMenuPanel.SetActive(false);
-        configPanel.SetActive(false);
-
-        loadingFld.SetActive(true);
+        shaderShift.enabled = true;
+        cameraAnimator.SetBool("runPlay", true);
         StartCoroutine(nowLoadingAsync());
     }
 
@@ -89,8 +91,8 @@ public class CanvasMainMenu : MonoBehaviour {
 
     public void btnConfig()
     {
-        MainMenuPanel.SetActive(false);
-        configPanel.SetActive(true);
+        shaderShift.enabled = true;
+        cameraAnimator.SetBool("run", true);
     }
 
     public void sldrMusicVol()
@@ -108,12 +110,13 @@ public class CanvasMainMenu : MonoBehaviour {
 
     public void btnBack()
     {
-        MainMenuPanel.SetActive(true);
-        configPanel.SetActive(false);
+        shaderShift.enabled = true;
+        cameraAnimator.SetBool("runBack", true);
     }
 
     public void btnExit()
     {
-        Application.Quit();
+        shaderShift.enabled = true;
+        cameraAnimator.SetBool("runExit", true);
     }
 }

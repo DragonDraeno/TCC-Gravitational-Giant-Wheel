@@ -174,12 +174,14 @@ public class PlayerControl : MonoBehaviour
 
         if (collision.gameObject.tag == "arShoot")
         {
+            glithCorruptedVram.enabled = true;
             mainCamera.GetComponent<ShaderEffect_CorruptedVram>().shift = 10;
             GetComponent<Rigidbody>().AddForce(new Vector3(800, 0, 0));
         }
 
         if (collision.gameObject.tag == "arShootEsq")
         {
+            glithCorruptedVram.enabled = true;
             mainCamera.GetComponent<ShaderEffect_CorruptedVram>().shift = -10;
             GetComponent<Rigidbody>().AddForce(new Vector3(-800, 0, 0));
         }
@@ -376,7 +378,8 @@ public class PlayerControl : MonoBehaviour
             glithCorruptedVram.shift -= Time.deltaTime * glithPower;
         }
         else {
-            glithCorruptedVram.shift = (int)0;
+            glithCorruptedVram.shift = 0;
+            glithCorruptedVram.enabled = false;
         }
     }
 }

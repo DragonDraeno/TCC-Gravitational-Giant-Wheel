@@ -21,6 +21,9 @@ public class ControlGame : MonoBehaviour {
     [SerializeField] private Toggle ButtonTgl;
     [SerializeField] private Toggle TouchTgl;
 
+    [SerializeField] private Animator animatorUi;
+    [SerializeField] private Animator animatorUiMoviment;
+
     private float timer;
     private float timerTotal;
     private bool pause;
@@ -39,7 +42,7 @@ public class ControlGame : MonoBehaviour {
         timerTotalTxt.text = "0";
         timer = 120;
         pause = false;
-        panelRefeshAndHome.SetActive(false);
+        //panelRefeshAndHome.SetActive(false);
         
         ButtonTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
         TouchTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
@@ -55,20 +58,27 @@ public class ControlGame : MonoBehaviour {
         if (begginer == true)
         {
             Time.timeScale = 0;
-            popUpChoseControll.SetActive(true);
+            //popUpChoseControll.SetActive(true);
+            animatorUi.SetBool("homeAndRefreshOpen", true);
             PlayerPrefs.SetInt("isBegginer", 1);
         }
         else {
             if (PlayerPrefs.GetInt("ButtonOrToutch") == 0) {
-                panelButtons.SetActive(true);
-                panelTouch.SetActive(false);
+                //panelButtons.SetActive(true);
+                //panelTouch.SetActive(false);
+                ButtonTgl.isOn = true;
+                TouchTgl.isOn = false;
+                animatorUiMoviment.SetBool("button", true);
             }
             else {
-                panelButtons.SetActive(false);
-                panelTouch.SetActive(true);
+                //panelButtons.SetActive(false);
+                //panelTouch.SetActive(true);
+                ButtonTgl.isOn = false;
+                TouchTgl.isOn = true;
+                animatorUiMoviment.SetBool("button", false);
             }
 
-            popUpChoseControll.SetActive(false);
+            //popUpChoseControll.SetActive(false);
         }
 
         timerPointsRespawn = 10;
@@ -101,15 +111,17 @@ public class ControlGame : MonoBehaviour {
         if (pause == false)
         {
             pause = true;
-            panelRefeshAndHome.SetActive(true);
-            popUpChoseControll.SetActive(true);
+            //panelRefeshAndHome.SetActive(true);
+            //popUpChoseControll.SetActive(true);
+            animatorUi.SetBool("homeAndRefreshOpen", true);
             Time.timeScale = 0;
         }
         else
         {
             pause = false;
-            panelRefeshAndHome.SetActive(false);
-            popUpChoseControll.SetActive(false);
+            //panelRefeshAndHome.SetActive(false);
+            //popUpChoseControll.SetActive(false);
+            animatorUi.SetBool("homeAndRefreshOpen", false);
             Time.timeScale = 1;
         }
     }
@@ -117,26 +129,27 @@ public class ControlGame : MonoBehaviour {
     public void IsBegginer()
     {
         if (ButtonTgl.isOn == true) {
-            panelButtons.SetActive(true);
-            panelTouch.SetActive(false);
+            //panelButtons.SetActive(true);
+            //panelTouch.SetActive(false);
+            animatorUiMoviment.SetBool("button", true);
             PlayerPrefs.SetInt("ButtonOrToutch", 0);
         }
 
         if (TouchTgl.isOn == true) {
-            panelTouch.SetActive(true);
-            panelButtons.SetActive(false);
+            //panelTouch.SetActive(true);
+            //panelButtons.SetActive(false);
+            animatorUiMoviment.SetBool("button", false);
             PlayerPrefs.SetInt("ButtonOrToutch", 1);
         }
 
-        if (panelRefeshAndHome.activeSelf == true)
+        /*if (panelRefeshAndHome.activeSelf == true)
         {
             Time.timeScale = 0;
         }
         else {
             Time.timeScale = 1;
-        }
-
-        popUpChoseControll.SetActive(false);
+        }*/
+        //popUpChoseControll.SetActive(false);
     }
     
     public void GameReloadLevelBtn()

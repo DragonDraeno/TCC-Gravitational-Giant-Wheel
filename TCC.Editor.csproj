@@ -423,6 +423,7 @@
     <None Include="Assets\_MK\MKGlowFree\Shader\Variants_SelectiveMode\Transparent\MK_Transparent-DiffuseBumpSpec.shader" />
     <None Include="Assets\_MK\MKGlowFree\Shader\Variants_SelectiveMode\Transparent\MK_Transparent-DiffuseBumped.shader" />
     <None Include="Assets\_MK\MKGlowFree\Shader\Variants_SelectiveMode\Transparent\MK_Transparent-Glossy.shader" />
+    <None Include="Assets\_Project\Shaders\Distortion1.shader" />
     <None Include="Assets\_Project\Shaders\Grid.shader" />
     <None Include="Assets\_Project\Shaders\environment.shader" />
   </ItemGroup>
