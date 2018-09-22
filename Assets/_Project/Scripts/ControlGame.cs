@@ -40,7 +40,7 @@ public class ControlGame : MonoBehaviour {
         Time.timeScale = 1;
         timerTxt.text = timer.ToString();
         timerTotalTxt.text = "0";
-        timer = 120;
+        timer = 30;
         pause = false;
         //panelRefeshAndHome.SetActive(false);
         

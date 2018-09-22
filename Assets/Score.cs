@@ -214,7 +214,7 @@ public class Score : MonoBehaviour {
         if (GetComponent<Canvas>().targetDisplay == 0 && !GameObject.Find("firebase"))
         {
             clone = Instantiate(firebaseInstancia);
-            clone.GetComponent<SampleScript>().textMesh = dadosFirebase.GetComponent<TextMesh>();
+            //clone.GetComponent<SampleScript>().textMesh = dadosFirebase.GetComponent<TextMesh>();
             clone.name = "firebase";
             encontroFirebase = 1;
         }

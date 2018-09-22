@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "644622166315",
+    "firebase_url": "https://tcc-gw.firebaseio.com",
+    "project_id": "tcc-gw",
+    "storage_bucket": "tcc-gw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644622166315:android:c8ac4d72b614ba41",
+        "android_client_info": {
+          "package_name": "com.DragonDraeno3.GravitationalGiantWheel3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644622166315-41h045rjt4oi1r9aqoa77o73tf6t5c1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoOimi_vzCoONh1-WowewJ1U5w30BSZSg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

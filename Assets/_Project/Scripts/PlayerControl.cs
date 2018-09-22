@@ -60,7 +60,7 @@ public class PlayerControl : MonoBehaviour
         speedUpOrDown = 10;
         speedInWallColide = 800;
 
-        coinBonus = 5;
+        coinBonus = 2;
 
         upOrDown = true;
         backStabUp = false;
