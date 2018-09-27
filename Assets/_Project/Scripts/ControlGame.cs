@@ -24,6 +24,8 @@ public class ControlGame : MonoBehaviour {
     [SerializeField] private Animator animatorUi;
     [SerializeField] private Animator animatorUiMoviment;
 
+    [SerializeField] private ControlScore controlScore;
+    
     private float timer;
     private float timerTotal;
     private bool pause;
@@ -34,13 +36,14 @@ public class ControlGame : MonoBehaviour {
 
     public float Timer {get{ return timer; }set{ timer = value; }}
     public float TimerPointsRespawn { get{ return timerPointsRespawn; }set{ timerPointsRespawn = value; }}
-    
+    public float TimerTotal { get { return timerTotal; } set { timerTotal = value; } }
+
     private void Awake()
     {
         Time.timeScale = 1;
         timerTxt.text = timer.ToString();
         timerTotalTxt.text = "0";
-        timer = 30;
+        timer = 5;
         pause = false;
         //panelRefeshAndHome.SetActive(false);
         
@@ -85,26 +88,36 @@ public class ControlGame : MonoBehaviour {
     }
 
     void Update () {
-        timer -= Time.deltaTime;
-        timerTxt.text = "Time: " + Mathf.Floor(timer / 60).ToString("00") + ":" + (timer % 60).ToString("00");
-        timerTotal += Time.deltaTime;
-        timerTotalTxt.text = "Time Total: " + Mathf.Floor(timerTotal / 60).ToString("00") + ":" + (timerTotal % 60).ToString("00");
 
-        if (TCKInput.GetAction("PauseBtn", EActionEvent.Down))
+        if (timer > 1)
         {
-            GamePauseBtn();
-        }
-        if (TCKInput.GetAction("GameReloadBtn", EActionEvent.Down))
-        {
-            GameReloadLevelBtn();
-        }
-        if (TCKInput.GetAction("BackToMenuBtn", EActionEvent.Down))
-        {
-            BackToMenuBtn();
-        }
+            timer -= Time.deltaTime;
+            timerTxt.text = "Time: " + Mathf.Floor(timer / 60).ToString("00") + ":" + (timer % 60).ToString("00");
+            timerTotal += Time.deltaTime;
+            timerTotalTxt.text = "Time Total: " + Mathf.Floor(timerTotal / 60).ToString("00") + ":" + (timerTotal % 60).ToString("00");
 
-        timerPointsRespawn += Time.deltaTime;
-        //print(timerPointsRespawn);
+            if (TCKInput.GetAction("PauseBtn", EActionEvent.Down))
+            {
+                GamePauseBtn();
+            }
+            if (TCKInput.GetAction("GameReloadBtn", EActionEvent.Down))
+            {
+                GameReloadLevelBtn();
+            }
+            if (TCKInput.GetAction("BackToMenuBtn", EActionEvent.Down))
+            {
+                BackToMenuBtn();
+            }
+
+            timerPointsRespawn += Time.deltaTime;
+        }
+        else {
+            timerTxt.text = "Time: " + Mathf.Floor(0).ToString("00") + ":" + (0).ToString("00");
+            Time.timeScale = 0;
+            popUpChoseControll.SetActive(false);
+            animatorUi.SetBool("homeAndRefreshOpen", true);
+            controlScore.FinishTime();
+        }
     }
 
     public void GamePauseBtn() {
