@@ -360,6 +360,7 @@
     <Compile Include="Assets\_Project\Scripts\ControlGame.cs" />
     <Compile Include="Assets\_Project\Scripts\ControlRespawnMoviment.cs" />
     <Compile Include="Assets\_Project\Scripts\ControlScore.cs" />
+    <Compile Include="Assets\_Project\Scripts\ControlScoreMainMenu.cs" />
     <Compile Include="Assets\_Project\Scripts\DBOScore.cs" />
     <Compile Include="Assets\_Project\Scripts\finalizeAnimation.cs" />
     <Compile Include="Assets\_Project\Scripts\Licenses.cs" />

@@ -9,7 +9,9 @@ public class CanvasMainMenu : MonoBehaviour {
     [SerializeField] private Button playBtn;
     [SerializeField] private Button configBtn;
     [SerializeField] private Button exitBtn;
+    [SerializeField] private Button scoreBtn;
     [SerializeField] private Button backBtn;
+    [SerializeField] private Button backScoreBtn;
     [SerializeField] private Slider musicVolSldr;
     [SerializeField] private Slider sondVolSldr;
 
@@ -35,7 +37,9 @@ public class CanvasMainMenu : MonoBehaviour {
         playBtn.onClick.AddListener(btnPlay);
         configBtn.onClick.AddListener(btnConfig);
         exitBtn.onClick.AddListener(btnExit);
+        scoreBtn.onClick.AddListener(btnScore);
         backBtn.onClick.AddListener(btnBack);
+        backScoreBtn.onClick.AddListener(btnScoreBack);
         musicVolSldr.onValueChanged.AddListener(delegate { sldrMusicVol(); });
         sondVolSldr.onValueChanged.AddListener(delegate { sldrSondVol(); });
     }
@@ -105,10 +109,19 @@ public class CanvasMainMenu : MonoBehaviour {
     {
         sondVol = sondVolSldr.GetComponent<Slider>().value;
         PlayerPrefs.SetFloat("sondVolPP", sondVol);
+    }
 
+    public void btnScore() {
+        shaderShift.enabled = true;
+        cameraAnimator.SetBool("runScore", true);
     }
 
     public void btnBack()
+    {
+        shaderShift.enabled = true;
+        cameraAnimator.SetBool("runBack", true);
+
+    } public void btnScoreBack()
     {
         shaderShift.enabled = true;
         cameraAnimator.SetBool("runBack", true);

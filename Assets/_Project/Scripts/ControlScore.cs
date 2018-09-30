@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using TouchControlsKit;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class ControlScore : MonoBehaviour
 {
@@ -66,7 +68,7 @@ public class ControlScore : MonoBehaviour
     }
 
     public void CallScore() {
-        if (iscreate == false)
+        if (iscreate == false && useDatabase == true)
         {
             iscreate = true;
             Time.timeScale = 0;
@@ -95,45 +97,46 @@ public class ControlScore : MonoBehaviour
         dbRef.Child("DBOScore").Push().SetRawJsonValueAsync(json);
     }
 
-    public void GetScore(string key)
+    public Task GetScore(string namekey)
     {
         Firebase.Database.FirebaseDatabase dbInstance = Firebase.Database.FirebaseDatabase.DefaultInstance;
-        dbInstance.GetReference("DBOScore").OrderByChild("score").GetValueAsync().ContinueWith(task =>
+        return dbInstance.GetReference("DBOScore").OrderByChild("score").GetValueAsync().ContinueWith(task =>
         {
-            if (task.IsFaulted)
-            {
-                // Handle the error...
-            }
-            else if (task.IsCompleted)
+            if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
 
-                list.Add(new DBOScore(0.000f, "Noob"));
-
-                foreach (DataSnapshot score in snapshot.Children)
+                int doPlayerPosition = 1;
+                foreach (DataSnapshot score in snapshot.Children.Reverse())
                 {
-                    IDictionary dictScore = (IDictionary)score.Value;
-                    list.Add(new DBOScore(float.Parse(dictScore["score"].ToString()), dictScore["name"].ToString()));
-                }
-                
-                for (int i = list.Count-1; i >= 0; i--) {
-                    TextMeshProUGUI textAux;
-                    if (key != list[i].name.ToString())
+                    if (doPlayerPosition < 101)
                     {
-                        textModel.text = (list.Count-i) + "° - " + list[i].name + ": " + list[i].score;
-                        textAux = textModel;
+                        IDictionary dictScore = (IDictionary)score.Value;
+                        PlayersInView(doPlayerPosition, dictScore["name"], dictScore["score"], namekey);
+                        doPlayerPosition++;
                     }
-                    else
-                    {
-                        textModelPlayer.text = (list.Count - i) + "° - " + list[i].name + ": " + list[i].score;
-                        textAux = textModelPlayer;
+                    else {
+                        break;
                     }
-
-                    textAux.enabled = true;
-                    Instantiate(textAux, ScoreScrollView.transform);
                 }
             }
         });
+    }
+
+    public void PlayersInView(int position, object name, object score, string keyName) {
+        TextMeshProUGUI textAux;
+        if (keyName != name.ToString())
+        {
+            textModel.text = position + "° - " + name + ": " + score;
+            textAux = textModel;
+        }
+        else {
+            textModelPlayer.text = position + "° - " + name + ": " + score;
+            textAux = textModelPlayer;
+        }
+
+        textAux.enabled = true;
+        Instantiate(textAux, ScoreScrollView.transform);
     }
 
     public void GameReloadLevelBtn()

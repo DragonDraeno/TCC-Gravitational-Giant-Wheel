@@ -8,6 +8,7 @@ public class finalizeAnimation : MonoBehaviour {
 
     public GameObject MainMenuPanel;
     public GameObject configPanel;
+    public GameObject scorePanel;
     public GameObject loadingFld;
     public ShaderEffect_CorruptedVram shaderShift;
 
@@ -19,7 +20,17 @@ public class finalizeAnimation : MonoBehaviour {
     public void MainMenuGoToConfig() {
         animator.SetBool("run", false);
         MainMenuPanel.SetActive(false);
+        scorePanel.SetActive(false);
         configPanel.SetActive(true);
+        shaderShift.enabled = false;
+    }
+
+    public void MainMenuGoToScore()
+    {
+        animator.SetBool("runScore", false);
+        MainMenuPanel.SetActive(false);
+        configPanel.SetActive(false);
+        scorePanel.SetActive(true);
         shaderShift.enabled = false;
     }
 
@@ -28,9 +39,10 @@ public class finalizeAnimation : MonoBehaviour {
         animator.SetBool("runBack", false);
         MainMenuPanel.SetActive(true);
         configPanel.SetActive(false);
+        scorePanel.SetActive(false);
         shaderShift.enabled = false;
     }
-
+    
     public void ExitGame() {
         animator.SetBool("runExit", false);
         Application.Quit();
@@ -41,6 +53,7 @@ public class finalizeAnimation : MonoBehaviour {
         animator.SetBool("runPlay", false);
         MainMenuPanel.SetActive(false);
         configPanel.SetActive(false);
+        scorePanel.SetActive(false);
         loadingFld.SetActive(true);
         shaderShift.enabled = false;
     }
