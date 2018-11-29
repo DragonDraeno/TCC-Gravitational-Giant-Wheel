@@ -20,25 +20,17 @@ public class ControlScoreMainMenu : MonoBehaviour {
     public Task LoadScoreInMenu()
     {
         Firebase.Database.FirebaseDatabase dbInstance = Firebase.Database.FirebaseDatabase.DefaultInstance;
-        return dbInstance.GetReference("DBOScore").OrderByChild("score").GetValueAsync().ContinueWith(task =>
+        return dbInstance.GetReference("DBOScore").OrderByChild("score").LimitToLast(100).GetValueAsync().ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                
                 int doPlayerPosition = 1;
-                
                 foreach (DataSnapshot score in snapshot.Children.Reverse())
                 {
-                    if (doPlayerPosition < 101)
-                    {
-                        IDictionary dictScore = (IDictionary)score.Value;
-                        PlayersInView(doPlayerPosition, dictScore["name"], dictScore["score"]);
-                        doPlayerPosition++;
-                    }
-                    else {
-                        break;
-                    }
+                    IDictionary dictScore = (IDictionary)score.Value;
+                    PlayersInView(doPlayerPosition, dictScore["name"], dictScore["score"]);
+                    doPlayerPosition++;
                 }
                 
             }

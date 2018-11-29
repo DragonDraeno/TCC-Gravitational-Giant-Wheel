@@ -32,9 +32,9 @@ public class Points : MonoBehaviour {
                 timerRuning = 0;
 
                 Transform childAux = GetChildOfChild();
-                //childAux.GetComponent<MeshRenderer>().enabled = true;
-                //Component halo = childAux.GetComponent("Halo");
-                //halo.GetType().GetProperty("enabled").SetValue(halo, true, null);
+                childAux.GetComponent<MeshRenderer>().enabled = true;
+                Component halo = childAux.GetComponent("Halo");
+                halo.GetType().GetProperty("enabled").SetValue(halo, true, null);
                 starColider.enabled = true;
             }
         }
@@ -47,8 +47,20 @@ public class Points : MonoBehaviour {
         {
             if (GetChildOfChild() != null) {
                 Transform childAux = GetChildOfChild();
-                //Component halo = childAux.GetComponent("Halo");
-                //halo.GetType().GetProperty("enabled").SetValue(halo, false, null);
+                Component halo = childAux.GetComponent("Halo");
+                halo.GetType().GetProperty("enabled").SetValue(halo, false, null);
+                childAux.GetComponent<MeshRenderer>().enabled = false;
+                starColider.enabled = false;
+            }
+        }
+
+        if (collision.gameObject.name == "personagemx")
+        {
+            if (GetChildOfChild() != null)
+            {
+                Transform childAux = GetChildOfChild();
+                Component halo = childAux.GetComponent("Halo");
+                halo.GetType().GetProperty("enabled").SetValue(halo, false, null);
                 childAux.GetComponent<MeshRenderer>().enabled = false;
                 starColider.enabled = false;
             }

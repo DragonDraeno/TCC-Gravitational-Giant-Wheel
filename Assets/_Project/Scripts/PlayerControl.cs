@@ -15,6 +15,8 @@ public class PlayerControl : MonoBehaviour
 
     [SerializeField] Animator personagemAnimacao;
     [SerializeField] Animator cameraAnimacao;
+
+    [SerializeField] ControlEfx controlEfx;
     
     float speedSide;
     float speedBase;
@@ -71,8 +73,7 @@ public class PlayerControl : MonoBehaviour
 
         glithCorruptedVram = mainCamera.GetComponent<ShaderEffect_CorruptedVram>();
     }
-
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         MovimentarLados();// faz o movimento
@@ -106,7 +107,10 @@ public class PlayerControl : MonoBehaviour
                                         );
 
             mainCamera.transform.localEulerAngles = currentAngle;*/
-   
+
+            GetComponent<Collider>().enabled = false;
+            controlEfx.ArcImp.Play();
+
             tempoOuloGigante = 0;
             personagemAnimacao.SetInteger("pulo", 1);
 
@@ -124,9 +128,11 @@ public class PlayerControl : MonoBehaviour
             if (upOrDown == true)
             {
                 print("esta andando corretamente para cima");
+                controlEfx.Arc.Play();
             }
             else {
                 print("esta andando para o lado contrario");
+                controlEfx.ArcReflect.Play();
                 backStabUp = true;
                 upOrDown = true;
                 limitaVelMinDown = -limitaVelMaxUp;
@@ -143,23 +149,33 @@ public class PlayerControl : MonoBehaviour
 
             if (upOrDown == false)
             {
+                controlEfx.Arc.Play();
                 print("esta andando corretamente para baixo");
             }
             else
             {
                 print("esta andando para o lado contrario");
+                controlEfx.ArcReflect.Play();
                 backStabDown = true;
                 upOrDown = false;
                 limitaVelMaxUp = Mathf.Abs(limitaVelMinDown);
             }
         }
+
+        if (collision.gameObject.tag == "arShoot" || collision.gameObject.tag == "arShootEsq")
+        {
+            controlEfx.AirShootColision.Play();
+        }
     }
 
     private void OnTriggerStay(Collider collision)
     {
+       
         if (collision.gameObject.tag == "Moeda")
         {
-            if(coinBonus <= 0.01f)
+            controlEfx.StarColision.Play();
+
+            if (coinBonus <= 0.01f)
             {
                 coinBonus = 0.01f;
             }
@@ -167,6 +183,18 @@ public class PlayerControl : MonoBehaviour
             controlGame.Timer += coinBonus;
 
             coinBonus -= Time.deltaTime;
+            collision.gameObject.GetComponent<Points>().PersonagemColision = true;
+            collision.gameObject.GetComponent<Points>().TimerToReturn = controlGame.TimerPointsRespawn;
+            Instantiate(pegaPonto, transform.position, Quaternion.identity);
+        }
+
+        if (collision.gameObject.tag == "StrongCoin")
+        {
+            controlEfx.StarColision.Play();
+            controlEfx.StarColision.Play();
+
+            controlGame.Timer += 15;
+            
             collision.gameObject.GetComponent<Points>().PersonagemColision = true;
             collision.gameObject.GetComponent<Points>().TimerToReturn = controlGame.TimerPointsRespawn;
             Instantiate(pegaPonto, transform.position, Quaternion.identity);
@@ -188,13 +216,22 @@ public class PlayerControl : MonoBehaviour
 
         if (collision.gameObject.tag == "WallH")
         {
-
             GetComponent<Rigidbody>().AddForce(new Vector3(-speedInWallColide, 0, 0));
         }
 
         if (collision.gameObject.tag == "WallL")
         {
             GetComponent<Rigidbody>().AddForce(new Vector3(speedInWallColide, 0, 0));
+        }
+
+        if (collision.gameObject.tag == "ShootWallR")
+        {
+            GetComponent<Rigidbody>().AddForce(new Vector3(speedInWallColide+1000, 0, 0));
+        }
+
+        if (collision.gameObject.tag == "ShootWallL")
+        {
+            GetComponent<Rigidbody>().AddForce(new Vector3(-(speedInWallColide+1000), 0, 0));
         }
     }
 
@@ -207,13 +244,13 @@ public class PlayerControl : MonoBehaviour
             if (TCKInput.GetAction("hightBtn", EActionEvent.Press))//dir
             {
                 resetSideVelocity = true;
-                GetComponent<Rigidbody>().AddForce(new Vector3(5000 * Time.deltaTime, 0, 0));
+                GetComponent<Rigidbody>().AddForce(new Vector3(8000 * Time.deltaTime, 0, 0));
             }
 
             if (TCKInput.GetAction("leftBtn", EActionEvent.Press))//esq
             {
                 resetSideVelocity = false;
-                GetComponent<Rigidbody>().AddForce(new Vector3(-5000 * Time.deltaTime, 0, 0));
+                GetComponent<Rigidbody>().AddForce(new Vector3(-8000 * Time.deltaTime, 0, 0));
             }
         }
         else {

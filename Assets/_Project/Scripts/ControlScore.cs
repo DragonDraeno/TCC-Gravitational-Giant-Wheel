@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using TouchControlsKit;
 using System.Linq;
-using System.Threading.Tasks;
+using UnityEngine.Advertisements;
 
 public class ControlScore : MonoBehaviour
 {
@@ -48,6 +48,11 @@ public class ControlScore : MonoBehaviour
                 UnityEngine.Debug.LogError(System.String.Format("Could not resolve all Firebase dependencies: {0}", dependencyStatus));
             }
         });
+    }
+
+    private void Start()
+    {
+        Advertisement.Initialize("2826948");
     }
 
     public void Update()
@@ -97,30 +102,33 @@ public class ControlScore : MonoBehaviour
         dbRef.Child("DBOScore").Push().SetRawJsonValueAsync(json);
     }
 
-    public Task GetScore(string namekey)
+    public void GetScore(string namekey)
     {
+        StartCoroutine(ShowAdWhenReady());
+
         Firebase.Database.FirebaseDatabase dbInstance = Firebase.Database.FirebaseDatabase.DefaultInstance;
-        return dbInstance.GetReference("DBOScore").OrderByChild("score").GetValueAsync().ContinueWith(task =>
+        dbInstance.GetReference("DBOScore").OrderByChild("score").LimitToLast(100).GetValueAsync().ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-
                 int doPlayerPosition = 1;
                 foreach (DataSnapshot score in snapshot.Children.Reverse())
                 {
-                    if (doPlayerPosition < 101)
-                    {
-                        IDictionary dictScore = (IDictionary)score.Value;
-                        PlayersInView(doPlayerPosition, dictScore["name"], dictScore["score"], namekey);
-                        doPlayerPosition++;
-                    }
-                    else {
-                        break;
-                    }
+                    IDictionary dictScore = (IDictionary)score.Value;
+                    PlayersInView(doPlayerPosition, dictScore["name"], dictScore["score"], namekey);
+                    doPlayerPosition++;
                 }
             }
         });
+    }
+
+    IEnumerator ShowAdWhenReady()
+    {
+        while (!Advertisement.IsReady("video01"))
+            yield return null;
+
+        Advertisement.Show("video01");
     }
 
     public void PlayersInView(int position, object name, object score, string keyName) {

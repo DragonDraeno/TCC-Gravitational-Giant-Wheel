@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Advertisements;
 
 public class ControlGame : MonoBehaviour {
 
@@ -25,7 +26,10 @@ public class ControlGame : MonoBehaviour {
     [SerializeField] private Animator animatorUiMoviment;
 
     [SerializeField] private ControlScore controlScore;
-    
+
+    [SerializeField] ControlEfx controlEfx;
+    [SerializeField] AudioSource backgroungMusic;
+
     private float timer;
     private float timerTotal;
     private bool pause;
@@ -37,16 +41,19 @@ public class ControlGame : MonoBehaviour {
     public float Timer {get{ return timer; }set{ timer = value; }}
     public float TimerPointsRespawn { get{ return timerPointsRespawn; }set{ timerPointsRespawn = value; }}
     public float TimerTotal { get { return timerTotal; } set { timerTotal = value; } }
-
+    
     private void Awake()
     {
+        Advertisement.Initialize("2826948");
+
+        backgroungMusic.volume = PlayerPrefs.GetFloat("musicVolPP");
+
         Time.timeScale = 1;
         timerTxt.text = timer.ToString();
         timerTotalTxt.text = "0";
-        timer = 5;
+        timer = 10;
         pause = false;
-        //panelRefeshAndHome.SetActive(false);
-        
+            
         ButtonTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
         TouchTgl.onValueChanged.AddListener(delegate { IsBegginer(); });
 
@@ -88,7 +95,7 @@ public class ControlGame : MonoBehaviour {
     }
 
     void Update () {
-
+        
         if (timer > 1)
         {
             timer -= Time.deltaTime;
@@ -123,17 +130,20 @@ public class ControlGame : MonoBehaviour {
     public void GamePauseBtn() {
         if (pause == false)
         {
+            //StartCoroutine(ShowAdWhenReady());
+            controlEfx.ClickButon.Play();
+            controlEfx.TransictionPanel.Play();
+            controlEfx.Glitch.Play();
             pause = true;
-            //panelRefeshAndHome.SetActive(true);
-            //popUpChoseControll.SetActive(true);
             animatorUi.SetBool("homeAndRefreshOpen", true);
             Time.timeScale = 0;
         }
         else
         {
+            controlEfx.ClickButon.Play();
+            controlEfx.TransictionPanel.Play();
+            controlEfx.Glitch.Pause();
             pause = false;
-            //panelRefeshAndHome.SetActive(false);
-            //popUpChoseControll.SetActive(false);
             animatorUi.SetBool("homeAndRefreshOpen", false);
             Time.timeScale = 1;
         }
@@ -142,15 +152,15 @@ public class ControlGame : MonoBehaviour {
     public void IsBegginer()
     {
         if (ButtonTgl.isOn == true) {
-            //panelButtons.SetActive(true);
-            //panelTouch.SetActive(false);
+            controlEfx.ClickButon.Play();
+            controlEfx.TransictionPanel.Play();
             animatorUiMoviment.SetBool("button", true);
             PlayerPrefs.SetInt("ButtonOrToutch", 0);
         }
 
         if (TouchTgl.isOn == true) {
-            //panelTouch.SetActive(true);
-            //panelButtons.SetActive(false);
+            controlEfx.ClickButon.Play();
+            controlEfx.TransictionPanel.Play();
             animatorUiMoviment.SetBool("button", false);
             PlayerPrefs.SetInt("ButtonOrToutch", 1);
         }
@@ -167,11 +177,24 @@ public class ControlGame : MonoBehaviour {
     
     public void GameReloadLevelBtn()
     {
+        controlEfx.ClickButon.Play();
+        controlEfx.TransictionPanel.Play();
         SceneManager.LoadScene("fase00", LoadSceneMode.Single);
     }
 
     public void BackToMenuBtn()
     {
+        controlEfx.ClickButon.Play();
+        controlEfx.TransictionPanel.Play();
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
+
+    IEnumerator ShowAdWhenReady()
+    {
+        while (!Advertisement.IsReady("video01"))
+            yield return null;
+
+        Advertisement.Show("video01");
+    }
+
 }
