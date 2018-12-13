@@ -6,14 +6,13 @@ public class PlayerGetBigStar : MonoBehaviour {
 
     private bool isColider = false;
     private float tempoOuloGigante = 0;
-
     [SerializeField] private Collider playerColider;
 
     private Collider gameObjectColider;
 
     private void Start()
     {
-        gameObjectColider = this. GetComponent<Collider>();
+        gameObjectColider = this.GetComponent<Collider>();
     }
 
     void FixedUpdate()
@@ -23,9 +22,14 @@ public class PlayerGetBigStar : MonoBehaviour {
         {
             gameObjectColider.enabled = false;
         }
-        else {
+
+        tempoOuloGigante += 1 * Time.deltaTime;
+        if (tempoOuloGigante >= 2)
+        {
+            tempoOuloGigante = 0;
             gameObjectColider.enabled = true;
         }
+
     }
 
     private void OnTriggerEnter(Collider collision)
